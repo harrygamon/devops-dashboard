@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Homelab",
+    "ssh_user": "ubuntu",
+    "host": "192.168.1.50"
+  },
+  {
+    "name": "Dev VPS",
+    "ssh_user": "root",
+    "host": "myserver.com"
+  }
+]

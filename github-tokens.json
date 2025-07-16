@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Personal",
+    "token": "ghp_xxx",
+    "repos": ["myuser/devops-dashboard", "myuser/ollama-integration"]
+  },
+  {
+    "label": "Work",
+    "token": "ghp_yyy",
+    "repos": ["myorg/frontend", "myorg/backend"]
+  }
+]

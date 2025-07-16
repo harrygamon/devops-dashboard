@@ -1,0 +1,45 @@
+name: CI/CD Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./devops-dashboard
+
+      - name: Run tests
+        run: npm run test --if-present
+        working-directory: ./devops-dashboard
+
+      - name: Build app
+        run: npm run build
+        working-directory: ./devops-dashboard
+
+      - name: Deploy to Vercel
+        run: npx vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes
+        working-directory: ./devops-dashboard
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: (Optional) Trigger backend update webhook
+        if: env.BACKEND_WEBHOOK_URL != ''
+        run: |
+          curl -X POST "$BACKEND_WEBHOOK_URL" -H "Authorization: Bearer $BACKEND_WEBHOOK_SECRET"
+        env:
+          BACKEND_WEBHOOK_URL: ${{ secrets.BACKEND_WEBHOOK_URL }}
+          BACKEND_WEBHOOK_SECRET: ${{ secrets.BACKEND_WEBHOOK_SECRET }} 
